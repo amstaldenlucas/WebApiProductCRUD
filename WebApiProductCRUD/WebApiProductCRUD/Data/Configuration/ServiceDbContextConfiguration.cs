@@ -15,9 +15,9 @@ namespace WebApiProductCRUD.Data.Configuration
             services.AddDbContext<AppDbContext>(options =>
             {
                 Func<DbContextOptionsBuilder, DbContextOptionsBuilder> optionsHandler
-                    = configuration["Environment"] switch
+                    = configuration[Const.UseInMemoryDatabase] switch
                     {
-                        Const.IntegrationEnvName => GetHandlerUseInMemory(),
+                        Const.StringTrue => GetHandlerUseInMemory(),
                         _ => GetHandlerUseSqlServer(configuration),
                     };
 

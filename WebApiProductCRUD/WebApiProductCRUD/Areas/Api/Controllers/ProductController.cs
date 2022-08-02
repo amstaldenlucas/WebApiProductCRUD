@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApiProductCRUD.Areas.Web.ViewModels;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Repositories;
 using WebApiProductCRUD.Utils;
@@ -11,10 +13,12 @@ namespace WebApiProductCRUD.Areas.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ProductController(IProductRepository repository)
+        public ProductController(IProductRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
