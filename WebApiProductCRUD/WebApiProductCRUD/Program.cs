@@ -1,20 +1,22 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebApiProductCRUD.Data;
+using WebApiProductCRUD.Data.Configuration;
+using WebApiProductCRUD.Data.Context;
+using Microsoft.AspNetCore.Identity;
+using WebApiProductCRUD.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+IConfiguration configuration = builder.Configuration;
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+var services = builder.Services;
+services.ConfigureDbContext(configuration);
+services.ConfigureUserAndIdentity();
+services.ConfigureServices();
+services.ConfigureRepositories();
+
 var app = builder.Build();
+await RunSeeding(app, args);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -52,8 +54,17 @@ app.UseEndpoints(enpoints =>
     });
 });
 
-app.MapRazorPages();
+//app.MapRazorPages();
 
 app.Urls.Add("http://*:1020");
 app.Urls.Add("https://*:2020");
 app.Run();
+
+static async Task RunSeeding(IHost host, string[] args)
+{
+    var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+    using IServiceScope? scope = scopeFactory?.CreateScope();
+    var seeder = scope?.ServiceProvider.GetService<DbSeeder>();
+    if (seeder is not null)
+        await seeder.SeedAsync(args);
+}
