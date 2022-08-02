@@ -3,6 +3,9 @@ using WebApiProductCRUD.Data.Configuration;
 using WebApiProductCRUD.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using WebApiProductCRUD.Models;
+using AutoMapper;
+using WebApiProductCRUD.Data.AutoMapper;
+using WebApiProductCRUD.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -10,10 +13,13 @@ IConfiguration configuration = builder.Configuration;
 builder.Services.AddControllersWithViews();
 
 var services = builder.Services;
+services.AddRazorPages();
+
 services.ConfigureDbContext(configuration);
 services.ConfigureUserAndIdentity();
 services.ConfigureServices();
 services.ConfigureRepositories();
+services.ConfigureAutoMapper();
 
 var app = builder.Build();
 await RunSeeding(app, args);
@@ -54,7 +60,7 @@ app.UseEndpoints(enpoints =>
     });
 });
 
-//app.MapRazorPages();
+app.MapRazorPages();
 
 app.Urls.Add("http://*:1020");
 app.Urls.Add("https://*:2020");
