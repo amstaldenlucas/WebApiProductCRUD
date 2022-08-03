@@ -15,18 +15,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WebApiProductCRUD.Models;
+using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Models.Security;
 
 namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<DbUser> _signInManager;
+        private readonly UserManager<DbUser> _userManager;
+        private readonly ITokenService _tokenService;
         private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<DbUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<DbUser> signInManager, ILogger<LoginModel> logger,
+            UserManager<DbUser> userManager, ITokenService tokenService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         /// <summary>
@@ -113,10 +119,13 @@ namespace WebApiProductCRUD.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var dbUser = await _userManager.FindByEmailAsync(Input.Email);
+                WriteCookies(dbUser);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "Home", new { area = "Web" });
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -136,6 +145,19 @@ namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private void WriteCookies(DbUser user)
+        {
+            var token = _tokenService.GenerateToken(user);
+            var cookieOption = new CookieOptions()
+            {
+                Secure = true,
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = TokenExpirationString.ToDateTime(token.Expiration),
+            };
+            HttpContext.Response.Cookies.Append(JwtConst.CookieName, token.AccessToken, cookieOption);
         }
     }
 }

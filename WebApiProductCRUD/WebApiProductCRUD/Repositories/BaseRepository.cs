@@ -85,7 +85,7 @@ namespace WebApiProductCRUD.Repositories
             };
         }
 
-        public virtual async Task<StatusResult<T>> DeleteSingle(T model)
+        public virtual async Task<StatusResult<T>> Delete(T model)
         {
             if (model is null)
                 return new StatusResult<T>("Data model was null");

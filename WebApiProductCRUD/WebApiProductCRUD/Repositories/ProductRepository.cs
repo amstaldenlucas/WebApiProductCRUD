@@ -23,8 +23,5 @@ namespace WebApiProductCRUD.Repositories
             // do diferente thinks
             return await base.Edit(model);
         }
-
-        public async Task<StatusResult<Product>> Delete(string id)
-            => await Delete(id);
     }
 }
