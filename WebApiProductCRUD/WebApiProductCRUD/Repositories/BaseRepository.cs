@@ -26,7 +26,7 @@ namespace WebApiProductCRUD.Repositories
             return await Task.FromResult(result);
         }
 
-        public virtual async Task<T> Get(string id)
+        public virtual async Task<T?> Get(string id)
         {
             var item = await DbContext.Set<T>()
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -85,7 +85,7 @@ namespace WebApiProductCRUD.Repositories
             };
         }
 
-        public virtual async Task<StatusResult<T>> DeleteSingle(T model)
+        public virtual async Task<StatusResult<T>> Delete(T model)
         {
             if (model is null)
                 return new StatusResult<T>("Data model was null");

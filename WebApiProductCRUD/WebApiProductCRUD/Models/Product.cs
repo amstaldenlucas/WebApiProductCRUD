@@ -13,14 +13,15 @@ namespace WebApiProductCRUD.Models
         public bool Deleted { get; set; }
 
         public string? Name { get; set; }
-        public double Price { get; set; }
 
         [NotMapped]
-        private double _stock;
-        public double Stock
+        private double _price;
+        public double Price
         {
-            get => _stock;
-            set => _stock = value > 0 ? value : 0;
+            get => _price;
+            set => _price = value > 0 ? value : 0;
         }
+
+        public double Stock { get; set; }
     }
 }

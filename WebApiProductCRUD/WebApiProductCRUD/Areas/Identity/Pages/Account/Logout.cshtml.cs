@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApiProductCRUD.Models;
+using WebApiProductCRUD.Services;
 
 namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 {
@@ -22,6 +23,11 @@ namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            HttpContext.Response.Cookies.Delete(JwtConst.CookieName);
+            //HttpContext.Response.Cookies.Delete(JwtConst.RefreshCookieName);
+            //HttpContext.Response.Cookies.Delete(JwtConst.RefreshUsernameCookieName);
+            await _signInManager.SignOutAsync();
+
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

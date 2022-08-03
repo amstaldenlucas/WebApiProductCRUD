@@ -10,7 +10,7 @@
 
         public bool Success { get; set; }
         public List<string> Messages { get; set; } = new List<string>();
-        public T Model { get; set; }
+        public T? Model { get; set; }
 
         public StatusResult<T> WithMessage(string message)
         {

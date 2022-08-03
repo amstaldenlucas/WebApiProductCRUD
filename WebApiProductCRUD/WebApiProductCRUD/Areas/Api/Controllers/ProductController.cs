@@ -38,7 +38,8 @@ namespace WebApiProductCRUD.Areas.Api.Controllers
 
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _repository.Delete(id);
+            var model = await _repository.Get(id);
+            var result = await _repository.Delete(model);
             return result.Success ? Ok(result) : BadRequest(result);
         }
     }

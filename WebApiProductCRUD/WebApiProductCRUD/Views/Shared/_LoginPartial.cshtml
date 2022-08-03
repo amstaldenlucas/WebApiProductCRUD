@@ -1,9 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<DbUser> SignInManager
 @inject UserManager<DbUser> UserManager
+@{
+    var isAuthenticated = BoolUtil.NullTo(User.Identity?.IsAuthenticated);
+}
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
+    @if (SignInManager.IsSignedIn(User) || isAuthenticated)
 {
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
