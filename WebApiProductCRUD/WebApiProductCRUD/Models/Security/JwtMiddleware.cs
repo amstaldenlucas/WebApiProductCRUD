@@ -47,11 +47,10 @@ namespace WebApiProductCRUD.Models.Security
                     catch (SecurityTokenExpiredException)
                     {
                         //if (await CheckForRefreshTokenCookie(context))
-                        if (1 == 1)
-                        {
-                            token = GetTokenFromHeadersAuthorization(context);
-                            context.User = ValidateToken(token);
-                        }
+                        //{
+                        //    token = GetTokenFromHeadersAuthorization(context);
+                        //    context.User = ValidateToken(token);
+                        //}
                     }
                     catch{ }
                 }
