@@ -11,7 +11,7 @@ namespace WebApiProductCRUD.Data
         {
         }
 
-        public DbSet<DbUser> DbUsers { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<DbUser>? DbUsers { get; set; }
+        public DbSet<Product>? Products { get; set; }
     }
 }

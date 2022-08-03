@@ -6,6 +6,7 @@ using WebApiProductCRUD.Models;
 using AutoMapper;
 using WebApiProductCRUD.Data.AutoMapper;
 using WebApiProductCRUD.Data;
+using WebApiProductCRUD.Models.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -37,7 +38,21 @@ else
 }
 
 app.UseHttpsRedirection();
+
+//app.UseSession();
+//app.Use(async (context, next) =>
+//{
+//    var token = context.Session.GetString("Token");
+//    if (!string.IsNullOrEmpty(token))
+//    {
+//        context.Request.Headers.Add("Authorization", "Bearer " + token);
+//    }
+//    await next();
+//});
+
 app.UseStaticFiles();
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();

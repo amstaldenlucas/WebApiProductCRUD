@@ -17,6 +17,8 @@ using Microsoft.Extensions.Logging;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Services;
 using WebApiProductCRUD.Models.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
 namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 {
@@ -119,11 +121,12 @@ namespace WebApiProductCRUD.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                var dbUser = await _userManager.FindByEmailAsync(Input.Email);
-                WriteCookies(dbUser);
 
                 if (result.Succeeded)
                 {
+                    var dbUser = await _userManager.FindByEmailAsync(Input.Email);
+                    WriteCookies(dbUser);
+
                     _logger.LogInformation("User logged in.");
                     return RedirectToAction("Index", "Home", new { area = "Web" });
                 }
@@ -147,7 +150,7 @@ namespace WebApiProductCRUD.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private void WriteCookies(DbUser user)
+        private Token WriteCookies(DbUser user)
         {
             var token = _tokenService.GenerateToken(user);
             var cookieOption = new CookieOptions()
@@ -158,6 +161,8 @@ namespace WebApiProductCRUD.Areas.Identity.Pages.Account
                 Expires = TokenExpirationString.ToDateTime(token.Expiration),
             };
             HttpContext.Response.Cookies.Append(JwtConst.CookieName, token.AccessToken, cookieOption);
+
+            return token;
         }
     }
 }

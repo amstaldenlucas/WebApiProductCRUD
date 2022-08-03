@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiProductCRUD.Models;
+using WebApiProductCRUD.Services;
 
 namespace WebApiProductCRUD.Data.Configuration
 {
@@ -33,49 +35,49 @@ namespace WebApiProductCRUD.Data.Configuration
                 .AddDefaultTokenProviders();
 
             var key = Encoding.ASCII.GetBytes(Const.Secret);
-            services.AddAuthentication(authOptions =>
-            {
-                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(bearerOptions =>
-                {
-                    bearerOptions.RequireHttpsMetadata = false;
-                    bearerOptions.SaveToken = true;
-                    bearerOptions.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                    };
-                });
-
-            //var signingConfigurations = new SigningConfigurations();
-            //services.AddSingleton(signingConfigurations);
-            //services.AddScoped<IAccessManager, JwtAccessManager>();
-
             //services.AddAuthentication(authOptions =>
             //{
             //    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             //    authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(bearerOptions =>
-            //{
-            //    var paramsValidation = bearerOptions.TokenValidationParameters;
-            //    paramsValidation.IssuerSigningKey = signingConfigurations.Key;
-            //    paramsValidation.ValidAudience = JwtConst.Audience;
-            //    paramsValidation.ValidIssuer = JwtConst.Issuer;
-            //    paramsValidation.ValidateIssuerSigningKey = true;
-            //    paramsValidation.ValidateLifetime = true;
-            //    paramsValidation.ClockSkew = TimeSpan.Zero;
-            //});
+            //})
+            //    .AddJwtBearer(bearerOptions =>
+            //    {
+            //        bearerOptions.RequireHttpsMetadata = false;
+            //        bearerOptions.SaveToken = true;
+            //        bearerOptions.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false,
+            //            ValidateLifetime = true,
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new SymmetricSecurityKey(key),
+            //        };
+            //    });
 
-            //services.AddAuthorization(auth =>
-            //{
-            //    auth.AddPolicy(JwtConst.Bearer, new AuthorizationPolicyBuilder()
-            //        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-            //        .RequireAuthenticatedUser().Build());
-            //});
+            //var signingConfigurations = new SigningConfigurations();
+            //services.AddSingleton(signingConfigurations);
+
+            services.AddAuthentication(authOptions =>
+            {
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = new SymmetricSecurityKey(key);
+                paramsValidation.ValidAudience = JwtConst.Audience;
+                paramsValidation.ValidIssuer = JwtConst.Issuer;
+                paramsValidation.ValidateIssuerSigningKey = true;
+                paramsValidation.ValidateLifetime = true;
+                paramsValidation.ClockSkew = TimeSpan.Zero;
+            });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy(JwtConst.Bearer, new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
 
             return services;
         }
