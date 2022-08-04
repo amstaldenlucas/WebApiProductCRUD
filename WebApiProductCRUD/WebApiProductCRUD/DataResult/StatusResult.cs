@@ -10,6 +10,9 @@
 
         public bool Success { get; set; }
         public List<string> Messages { get; set; } = new List<string>();
+
+        public List<KeyAndErrorMessage> KeyAndErrorMessages { get; set; } = new();
+
         public T? Model { get; set; }
 
         public StatusResult<T> WithMessage(string message)
