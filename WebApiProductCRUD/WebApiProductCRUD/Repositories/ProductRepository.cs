@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebApiProductCRUD.Data;
+﻿using WebApiProductCRUD.Data;
 using WebApiProductCRUD.DataResult;
 using WebApiProductCRUD.Models;
 
@@ -22,6 +17,38 @@ namespace WebApiProductCRUD.Repositories
         {
             // do diferente thinks
             return await base.Edit(model);
+        }
+
+        protected override bool ModelIsValid(Product item, out StatusResult<Product> modelValidationResult)
+        {
+            var message = string.Empty;
+            modelValidationResult = new StatusResult<Product> { Success = true };
+
+            if (string.IsNullOrWhiteSpace(item.Name?.Trim()))
+            {
+                message = $"Invalid value for [{nameof(item.Name)}]";
+                modelValidationResult.Success = false;
+                modelValidationResult.Messages.Add(message);
+                modelValidationResult.KeyAndErrorMessages.Add(new KeyAndErrorMessage(nameof(item.Name), message));
+            }
+
+            if (item.Price < 0)
+            {
+                message = $"Invalid value for [{nameof(item.Price)}]";
+                modelValidationResult.Success = false;
+                modelValidationResult.Messages.Add(message);
+                modelValidationResult.KeyAndErrorMessages.Add(new KeyAndErrorMessage(nameof(item.Price), message));
+            }
+
+            if (item.Stock < 0)
+            {
+                message = $"Invalid value for [{nameof(item.Stock)}]";
+                modelValidationResult.Success = false;
+                modelValidationResult.Messages.Add(message);
+                modelValidationResult.KeyAndErrorMessages.Add(new KeyAndErrorMessage(nameof(item.Stock), message));
+            }
+
+            return modelValidationResult.Success;
         }
     }
 }
