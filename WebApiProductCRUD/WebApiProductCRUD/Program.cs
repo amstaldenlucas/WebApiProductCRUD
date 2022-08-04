@@ -9,6 +9,7 @@ using WebApiProductCRUD.Data;
 using WebApiProductCRUD.Models.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Services.WebData;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -26,6 +27,10 @@ services.ConfigureAutoMapper();
 
 services.AddTransient<IEmailSender>(x =>
     new BasicMailSender("smtp.gmail.com", "[mail]@gmail.com", "password"));
+
+services.AddHttpClient();
+services.AddTransient<IWebDataService, HttpClientDataService>();
+services.AddHttpContextAccessor();
 
 var app = builder.Build();
 await RunSeeding(app, args);

@@ -15,22 +15,15 @@ namespace WebApiProductCRUD.Repositories
             DbContext = appDbContext;
         }
 
-        public virtual async Task<IEnumerable<T>> Get(DateTime? date = null)
+        public virtual async Task<IEnumerable<T?>> Get(string? id = null)
         {
             var baseQueryable = DbContext.Set<T>();
 
-            var result = date.HasValue
-                ? baseQueryable.Where(x => x.LastUpdateUtc > date)
+            var result = (id != null)
+                ? baseQueryable.Where(x => x.Id == id)
                 : baseQueryable;
 
-            return await Task.FromResult(result);
-        }
-
-        public virtual async Task<T?> Get(string id)
-        {
-            var item = await DbContext.Set<T>()
-                .FirstOrDefaultAsync(x => x.Id == id);
-            return item;
+            return await Task.FromResult(baseQueryable);
         }
 
         public virtual async Task<StatusResult<T>> CreateSingle(T model)
@@ -85,7 +78,7 @@ namespace WebApiProductCRUD.Repositories
             };
         }
 
-        public virtual async Task<StatusResult<T>> Delete(T model)
+        public virtual async Task<StatusResult<T>> Delete(T? model)
         {
             if (model is null)
                 return new StatusResult<T>("Data model was null");

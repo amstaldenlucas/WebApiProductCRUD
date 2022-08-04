@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiProductCRUD.Areas.Web.ViewModels;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Repositories;
+using WebApiProductCRUD.Services.WebData;
 using WebApiProductCRUD.Utils;
 
 namespace WebApiProductCRUD.Areas.Web.Controllers
@@ -18,26 +19,32 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _repository;
+        private readonly IWebDataService _apiService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductRepository repository, IMapper mapper)
+        public ProductController(IProductRepository repository, IMapper mapper, IWebDataService apiService)
         {
             _repository = repository;
             _mapper = mapper;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var products = await _repository.Get();
-            return View(products.ToArray());
+            var result = await _apiService.Get<Product>();
+            return View(result.Items.ToArray());
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string? id = null)
         {
-            var item = await _repository.Get(id);
+            if (string.IsNullOrEmpty(id))
+                return View(new ProductVm());
 
-            var vm = _mapper.Map<ProductVm>(item);
+            var result = await _apiService.Get<Product>(id);
+            var vm = _mapper.Map<ProductVm>(result.Items.FirstOrDefault());
+            
             vm ??= new ProductVm();
             return View(vm);
         }

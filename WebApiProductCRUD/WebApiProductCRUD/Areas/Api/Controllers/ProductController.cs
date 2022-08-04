@@ -22,15 +22,14 @@ namespace WebApiProductCRUD.Areas.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string from)
+        public async Task<IActionResult> Get(string? id = null)
         {
-            var dateFrom = StringDateTime.Parse(from, DateTime.Now.AddYears(-1));
-            var list = await _repository.Get(dateFrom);
+            var list = await _repository.Get(id);
             return Ok(list);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Product model)
+        public async Task<IActionResult> Edit([FromBody] Product model)
         {
             var result = await _repository.Edit(model);
             return result.Success ? Ok(result) : BadRequest(result);
@@ -39,7 +38,7 @@ namespace WebApiProductCRUD.Areas.Api.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var model = await _repository.Get(id);
-            var result = await _repository.Delete(model);
+            var result = await _repository.Delete(model.First());
             return result.Success ? Ok(result) : BadRequest(result);
         }
     }
