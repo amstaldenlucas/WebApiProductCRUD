@@ -35,10 +35,9 @@ namespace WebApiProductCRUD.Areas.Api.Controllers
             return Ok(result);
         }
 
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete([FromBody] Product model)
         {
-            var model = await _repository.Get(id);
-            var result = await _repository.Delete(model.First());
+            var result = await _repository.Delete(model);
             return result.Success ? Ok(result) : BadRequest(result);
         }
     }

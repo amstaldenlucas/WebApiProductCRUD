@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-body">
                 <a class="btn btn-primary"
-                    asp-action="Edit">
+                   asp-action="Edit">
                     Cadastrar Produto
                 </a>
             </div>
@@ -30,6 +30,7 @@
                                 <th>Nome</th>
                                 <th>Preço</th>
                                 <th>Estoque</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,16 @@
                                     </td>
                                     <td class="font-weight-bold">
                                         @item.Stock
+                                    </td>
+                                    <td class="font-weight-bold">
+                                        <div class="ms-auto display-flex">
+                                            <a class="btn btn-link" asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="fa-solid fa-pencil text-dark me-2"></i>
+                                            </a>
+                                            <a class="btn btn-link" asp-action="Delete" asp-route-id="@item.Id">
+                                                <i class="fa-regular fa-trash-can text-danger"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             }

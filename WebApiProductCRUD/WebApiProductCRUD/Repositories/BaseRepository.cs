@@ -17,13 +17,14 @@ namespace WebApiProductCRUD.Repositories
 
         public virtual async Task<IEnumerable<T?>> Get(string? id = null)
         {
-            var baseQueryable = DbContext.Set<T>();
+            var baseQueryable = DbContext.Set<T>()
+                .Where(x => !x.Deleted);
 
             var result = (id != null)
                 ? baseQueryable.Where(x => x.Id == id)
                 : baseQueryable;
 
-            return await Task.FromResult(baseQueryable);
+            return await Task.FromResult(result);
         }
 
         public virtual async Task<StatusResult<T>> CreateSingle(T model)
@@ -83,7 +84,7 @@ namespace WebApiProductCRUD.Repositories
             if (model is null)
                 return new StatusResult<T>("Data model was null");
 
-            if (model.Id != null)
+            if (model.Id is null)
                 return new StatusResult<T>("Cannot delete item with id null");
 
             var item = await DbContext.Set<T>()

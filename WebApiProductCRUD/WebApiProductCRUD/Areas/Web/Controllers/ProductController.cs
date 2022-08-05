@@ -53,7 +53,7 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
         public async Task<IActionResult> Edit(ProductVm vm)
         {
             var model = _mapper.Map<Product>(vm);
-            var apiUri = _apiService.ApiEndpoint(typeof(Product)) + "/Edit";
+            var apiUri = _apiService.ApiEndpoint(typeof(Product)) + $"/{nameof(Edit)}";
             var result = await _apiService.Post<Product>(apiUri, model);
 
             if (result.Success)
@@ -63,6 +63,19 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
                 ModelState.AddModelError(item.Key, item.Message);
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return View(nameof(Index));
+
+            var model = (await _apiService.Get<Product>(id)).Items.First();
+            var apiUri = _apiService.ApiEndpoint(typeof(Product)) + $"/{nameof(Delete)}";
+            var result = await _apiService.Post<Product>(apiUri, model);
+
+            return RedirectToAction(nameof(Index));
         }
 
     }

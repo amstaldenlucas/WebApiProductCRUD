@@ -33,7 +33,7 @@ namespace WebApiProductCRUD.Services.WebData
             {
                 await EnsureTokenInRequestAsync();
                 var uri = ApiEndpoint(typeof(T)) + "/Get";
-                uri += id ?? "";
+                uri += $"/{id}" ?? "";
                 var response = await _httpClient.GetAsync(uri);
 
                 if (!response.IsSuccessStatusCode)
