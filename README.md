@@ -3,7 +3,7 @@
 
 ## Apresentação projeto
 
-[Link para apresentação do Projeto](https://youtu.be/woE4461XX-U).
+[Link para apresentação do Projeto](https://youtu.be/woE4461XX-U){:target="_blank" rel="noopener"}.
 
 ## Objetivo do projeto
 Este projeto tem como objetivo principal desenvolver um aplicativo web com duas vertentes:<br>
