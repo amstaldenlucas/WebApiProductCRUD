@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiProductCRUD.Models;
-using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Services.Security;
 
 namespace WebApiProductCRUD.Data.Configuration
 {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApiProductCRUD.Models;
-using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Services.Security;
 
 namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 {

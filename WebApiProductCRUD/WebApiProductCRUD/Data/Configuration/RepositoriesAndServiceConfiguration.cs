@@ -1,5 +1,5 @@
 ﻿using WebApiProductCRUD.Repositories;
-using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Services.Security;
 using WebApiProductCRUD.Services.WebData;
 
 namespace WebApiProductCRUD.Data.Configuration

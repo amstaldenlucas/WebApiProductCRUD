@@ -1,4 +1,4 @@
-﻿namespace WebApiProductCRUD.Services
+﻿namespace WebApiProductCRUD.Services.Security
 {
     internal static class JwtConst
     {

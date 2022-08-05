@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiProductCRUD.Data;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Models.Security;
-using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Services.Security;
 
 namespace WebApiProductCRUD.Areas.Api.Controllers
 {

@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiProductCRUD.Data;
-using WebApiProductCRUD.Services;
+using WebApiProductCRUD.Services.Security;
 using WebApiProductCRUD.Utils;
 
 namespace WebApiProductCRUD.Models.Security
