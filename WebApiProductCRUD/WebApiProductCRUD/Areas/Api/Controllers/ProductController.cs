@@ -32,7 +32,7 @@ namespace WebApiProductCRUD.Areas.Api.Controllers
         public async Task<IActionResult> Edit([FromBody] Product model)
         {
             var result = await _repository.Edit(model);
-            return result.Success ? Ok(result) : BadRequest(result);
+            return Ok(result);
         }
 
         public async Task<IActionResult> Delete(string id)

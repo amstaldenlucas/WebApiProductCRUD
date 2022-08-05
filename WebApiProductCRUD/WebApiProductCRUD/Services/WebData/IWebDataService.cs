@@ -1,6 +1,5 @@
 ﻿using WebApiProductCRUD.DataResult;
 using WebApiProductCRUD.Models;
-using WebApiProductCRUD.Models.Security;
 
 namespace WebApiProductCRUD.Services.WebData
 {
@@ -10,6 +9,6 @@ namespace WebApiProductCRUD.Services.WebData
 
         string ApiEndpoint(Type type);
 
-        Task<HttpResponseMessage> Post(string uri, object data);
+        Task<StatusResult<T>> Post<T>(string uri, object data);
     }
 }

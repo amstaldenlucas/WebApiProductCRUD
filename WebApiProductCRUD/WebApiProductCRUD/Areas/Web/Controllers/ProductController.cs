@@ -53,7 +53,9 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
         public async Task<IActionResult> Edit(ProductVm vm)
         {
             var model = _mapper.Map<Product>(vm);
-            var result = await _repository.Edit(model);
+            var apiUri = _apiService.ApiEndpoint(typeof(Product)) + "/Edit";
+            var result = await _apiService.Post<Product>(apiUri, model);
+
             if (result.Success)
                 return RedirectToAction(nameof(Index));
 

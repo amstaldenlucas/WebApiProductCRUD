@@ -53,7 +53,7 @@ namespace WebApiProductCRUD.Services.WebData
             }
         }
 
-        public async Task<HttpResponseMessage> Post(string uri, object data)
+        public async Task<StatusResult<T>> Post<T>(string uri, object data)
         {
             var serializedData = JsonConvert.SerializeObject(data);
             await EnsureTokenInRequestAsync();
@@ -65,7 +65,16 @@ namespace WebApiProductCRUD.Services.WebData
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await _httpClient.SendAsync(request);
-            return response;
+            if (!response.IsSuccessStatusCode)
+                return new StatusResult<T>("Não houve resposta de sucesso na chamada ao servidor");
+
+            var responseAsString = await response.Content.ReadAsStringAsync();
+            var deserializedItem = JsonConvert.DeserializeObject<StatusResult<T>>(responseAsString);
+
+            if (deserializedItem is null)
+                return new StatusResult<T>();
+
+            return deserializedItem;
         }
 
 
