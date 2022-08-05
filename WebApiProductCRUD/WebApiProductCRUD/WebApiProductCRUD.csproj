@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Include="Views\Shared\Menu\_AuthenticatedMenuPartial.cshtml" />
+    <None Include="wwwroot\js\product\product.js" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Models.Security;
 
-namespace WebApiProductCRUD.Services
+namespace WebApiProductCRUD.Services.Security
 {
     public interface ITokenService
     {

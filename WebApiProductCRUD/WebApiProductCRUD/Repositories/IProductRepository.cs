@@ -5,8 +5,7 @@ namespace WebApiProductCRUD.Repositories
 {
     public interface IProductRepository
     {
-        Task<Product?> Get(string id);
-        Task<IEnumerable<Product>> Get(DateTime? date = null);
+        Task<IEnumerable<Product?>> Get(string? id = null);
         Task<StatusResult<Product>> Edit(Product model);
         Task<StatusResult<Product>> Delete(Product model);
     }

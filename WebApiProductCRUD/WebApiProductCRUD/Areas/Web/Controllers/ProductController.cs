@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiProductCRUD.Areas.Web.ViewModels;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Repositories;
+using WebApiProductCRUD.Services.WebData;
 using WebApiProductCRUD.Utils;
 
 namespace WebApiProductCRUD.Areas.Web.Controllers
@@ -18,26 +19,42 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _repository;
+        private readonly IWebDataService _apiService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductRepository repository, IMapper mapper)
+        public ProductController(IProductRepository repository, IMapper mapper, IWebDataService apiService)
         {
             _repository = repository;
             _mapper = mapper;
+            _apiService = apiService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? productName = null)
         {
-            var products = await _repository.Get();
-            return View(products.ToArray());
+            var result = await _apiService.Get<Product>();
+            var items = result.Items.ToArray();
+            if (!string.IsNullOrWhiteSpace(productName))
+            {
+                items = items
+                    .Where(x => x.Name
+                    .ToLower()
+                    .Contains(productName.ToLower()))
+                    .ToArray();
+            }
+
+            return View(items);
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string? id = null)
         {
-            var item = await _repository.Get(id);
+            if (string.IsNullOrEmpty(id))
+                return View(new ProductVm());
 
-            var vm = _mapper.Map<ProductVm>(item);
+            var result = await _apiService.Get<Product>(id);
+            var vm = _mapper.Map<ProductVm>(result.Items.FirstOrDefault());
+
             vm ??= new ProductVm();
             return View(vm);
         }
@@ -46,7 +63,9 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
         public async Task<IActionResult> Edit(ProductVm vm)
         {
             var model = _mapper.Map<Product>(vm);
-            var result = await _repository.Edit(model);
+            var apiUri = _apiService.ApiEndpoint(typeof(Product)) + $"/{nameof(Edit)}";
+            var result = await _apiService.Post<Product>(apiUri, model);
+
             if (result.Success)
                 return RedirectToAction(nameof(Index));
 
@@ -54,6 +73,19 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
                 ModelState.AddModelError(item.Key, item.Message);
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return View(nameof(Index));
+
+            var model = (await _apiService.Get<Product>(id)).Items.First();
+            var apiUri = _apiService.ApiEndpoint(typeof(Product)) + $"/{nameof(Delete)}";
+            var result = await _apiService.Post<Product>(apiUri, model);
+
+            return RedirectToAction(nameof(Index));
         }
 
     }

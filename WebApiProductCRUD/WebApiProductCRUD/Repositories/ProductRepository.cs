@@ -10,8 +10,8 @@ namespace WebApiProductCRUD.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Product>> Get(DateTime? date = null)
-            => await base.Get(date);
+        public override async Task<IEnumerable<Product?>> Get(string? id = null)
+            => await base.Get(id);
 
         public override async Task<StatusResult<Product>> Edit(Product model)
         {

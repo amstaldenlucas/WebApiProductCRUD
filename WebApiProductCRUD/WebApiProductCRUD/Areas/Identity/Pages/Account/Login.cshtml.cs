@@ -15,10 +15,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WebApiProductCRUD.Models;
-using WebApiProductCRUD.Services;
 using WebApiProductCRUD.Models.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
+using WebApiProductCRUD.Services.Security;
 
 namespace WebApiProductCRUD.Areas.Identity.Pages.Account
 {

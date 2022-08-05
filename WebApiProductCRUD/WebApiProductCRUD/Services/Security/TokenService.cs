@@ -7,7 +7,7 @@ using WebApiProductCRUD.Data;
 using WebApiProductCRUD.Models;
 using WebApiProductCRUD.Models.Security;
 
-namespace WebApiProductCRUD.Services
+namespace WebApiProductCRUD.Services.Security
 {
     public class TokenService : ITokenService
     {
@@ -20,8 +20,8 @@ namespace WebApiProductCRUD.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Const.Secret);
-            
-            
+
+
             (var claims, var identity) = GetClaimsAndIdentity(dbUser);
 
             var tokenDescriptor = GenerateSecurityTokenDescriptor(key, claims, identity, cretedTokenUtc);

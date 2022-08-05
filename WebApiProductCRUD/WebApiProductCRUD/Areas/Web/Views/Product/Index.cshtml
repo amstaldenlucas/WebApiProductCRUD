@@ -7,10 +7,22 @@
     <div class="row mb-3">
         <div class="card">
             <div class="card-body">
-                <a class="btn btn-primary"
-                    asp-action="Edit">
-                    Cadastrar Produto
-                </a>
+                <div class="row d-flex justify-content-between">
+                    <div class="col-6">
+                        <form method="get" asp-action="Index">
+                            <div class="row">
+                                <input class="form-control w-50 me-3" placeholder="Nome Produto" name="productName" type="text" />
+                                <button type="submit" class="btn btn-secondary w-auto">Buscar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col text-end">
+                        <a class="btn btn-primary"
+                           asp-action="Edit">
+                            Cadastrar Produto
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,6 +42,7 @@
                                 <th>Nome</th>
                                 <th>Preço</th>
                                 <th>Estoque</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +57,16 @@
                                     </td>
                                     <td class="font-weight-bold">
                                         @item.Stock
+                                    </td>
+                                    <td class="font-weight-bold">
+                                        <div class="ms-auto display-flex">
+                                            <a class="btn btn-link" asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="fa-solid fa-pencil text-dark me-2"></i>
+                                            </a>
+                                            <a class="btn btn-link" asp-action="Delete" asp-route-id="@item.Id">
+                                                <i class="fa-regular fa-trash-can text-danger"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             }
