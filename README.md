@@ -2,8 +2,7 @@
 <p>A Web project with two parts. The first one is to perform a CRUD from API. The second one perform the same CRUD from web page.</p>
 
 ## Apresentação projeto
-
-[Link para apresentação do Projeto](https://youtu.be/woE4461XX-U){:target="_blank" rel="noopener"}.
+<a href="https://youtu.be/woE4461XX-U" target="_blank">Link para apresentação do Projeto.</a>
 
 ## Objetivo do projeto
 Este projeto tem como objetivo principal desenvolver um aplicativo web com duas vertentes:<br>
