@@ -29,10 +29,20 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
             _apiService = apiService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? productName = null)
         {
             var result = await _apiService.Get<Product>();
-            return View(result.Items.ToArray());
+            var items = result.Items.ToArray();
+            if (!string.IsNullOrWhiteSpace(productName))
+            {
+                items = items
+                    .Where(x => x.Name
+                    .ToLower()
+                    .Contains(productName.ToLower()))
+                    .ToArray();
+            }
+
+            return View(items);
 
         }
 
@@ -44,7 +54,7 @@ namespace WebApiProductCRUD.Areas.Web.Controllers
 
             var result = await _apiService.Get<Product>(id);
             var vm = _mapper.Map<ProductVm>(result.Items.FirstOrDefault());
-            
+
             vm ??= new ProductVm();
             return View(vm);
         }
